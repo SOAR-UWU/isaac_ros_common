@@ -23,24 +23,21 @@ DOCKER_SEARCH_DIRS=(${DOCKER_DIR})
 #
 # CONFIG_DOCKER_SEARCH_DIRS (array, can be empty)
 
-if [[ -f "${ROOT}/.isaac_ros_common-config" ]]; then
-    . "${ROOT}/.isaac_ros_common-config"
+# Prepend configured docker search dirs
+if [ ${#CONFIG_DOCKER_SEARCH_DIRS[@]} -gt 0 ]; then
+for (( i=${#CONFIG_DOCKER_SEARCH_DIRS[@]}-1 ; i>=0 ; i-- )); do
+	
 
-    # Prepend configured docker search dirs
-    if [ ${#CONFIG_DOCKER_SEARCH_DIRS[@]} -gt 0 ]; then
-        for (( i=${#CONFIG_DOCKER_SEARCH_DIRS[@]}-1 ; i>=0 ; i-- )); do
-
-            # If the path is relative, then prefix ROOT to the path
-            if [[ "${CONFIG_DOCKER_SEARCH_DIRS[i]}" != /* ]]; then
-                CONFIG_DOCKER_SEARCH_DIRS[$i]="${ROOT}/${CONFIG_DOCKER_SEARCH_DIRS[i]}"
-            fi
-        done
-
-        CONFIG_DOCKER_SEARCH_DIRS+=(${DOCKER_SEARCH_DIRS[@]})
-        DOCKER_SEARCH_DIRS=(${CONFIG_DOCKER_SEARCH_DIRS[@]})
-
-        print_info "Using configured docker search paths: ${DOCKER_SEARCH_DIRS[*]}"
+    # If the path is relative, then prefix ROOT to the path
+    if [[ "${CONFIG_DOCKER_SEARCH_DIRS[i]}" != /* ]]; then
+	CONFIG_DOCKER_SEARCH_DIRS[$i]="${ROOT}/${CONFIG_DOCKER_SEARCH_DIRS[i]}"
     fi
+done
+
+CONFIG_DOCKER_SEARCH_DIRS+=(${DOCKER_SEARCH_DIRS[@]})
+DOCKER_SEARCH_DIRS=(${CONFIG_DOCKER_SEARCH_DIRS[@]})
+
+print_info "Using configured docker search paths: ${DOCKER_SEARCH_DIRS[*]}"
 fi
 
 TARGET_IMAGE_STR="$1"

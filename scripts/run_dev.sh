@@ -153,7 +153,7 @@ fi
 
 # Build image.
 print_info "Building $BASE_IMAGE_KEY base as image: $BASE_NAME"
-$ROOT/build_base_image.sh $BASE_IMAGE_KEY $BASE_NAME '' '' ''
+. $ROOT/build_base_image.sh $BASE_IMAGE_KEY $BASE_NAME '' '' ''
 
 if [ $? -ne 0 ]; then
     print_error "Failed to build base image: $BASE_NAME, aborting."
