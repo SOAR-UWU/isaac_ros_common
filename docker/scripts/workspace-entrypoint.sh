@@ -9,7 +9,10 @@
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
 
 # Build ROS dependency
-echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
+# Don't add setup.bash if already added to .bashrc
+if ! grep -q "source /opt/ros/${ROS_DISTRO}/setup.bash" ~/.bashrc; then
+  echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
+fi
 source /opt/ros/${ROS_DISTRO}/setup.bash
 
 sudo apt-get update
